@@ -15,7 +15,7 @@ class ImageDataset(Dataset):
             image_back = ImageDataset.preprocess_image(image_back)
 
             self.mask_fore = image_fore.mean(axis=-1) >= 1 - eps
-            self.mask_back = image_back.mean(axis=-1) >= 1 - eps
+            self.mask_back = image_fore.mean(axis=-1) < 1 - eps
         else:
             self.mask_fore = np.ones(image_original.shape[:2])
             self.mask_back = np.zeros_like(self.mask_fore)

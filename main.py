@@ -58,3 +58,5 @@ def train_main(filename: str):
 def main():
     train_main("apples")
     train_main("mandarins")
+
+main()

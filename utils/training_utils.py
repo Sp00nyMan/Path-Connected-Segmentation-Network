@@ -15,14 +15,14 @@ def train(plain_model: Network, convex_model: Network, flow_model: FlowNetwork,
           data_loader: DataLoader, all_data: ImageDataset,
           optimizer: Optimizer, criterion,
           name: str, 
-          epochs: int = 5, all_data_fraction: int = 0.8,
+          epochs: int = 300, all_data_fraction: int = 0.8,
           save_log: bool = True, save_folder: str = r".snapshots", 
           teacher=True, pc=True):
     
     if flow_model is not None and convex_model is None:
         raise ValueError("Training the flow model doesn't make sense without the convex model")
     
-    save_folder =+ "/" + name
+    save_folder += "/" + name
 
     if save_log:
         if teacher:
@@ -54,7 +54,10 @@ def train(plain_model: Network, convex_model: Network, flow_model: FlowNetwork,
                 outputs_convex = convex_model(outputs_flow if pc else inputs[:, :2])
 
                 outputs_convex = outputs_convex[:len(labels)]
-                loss += criterion(outputs_convex, labels)
+                if teacher:
+                    loss += criterion(outputs_convex, labels)
+                else:
+                    loss = criterion(outputs_convex, labels)
 
                 # TODO Change to MSELoss
                 if teacher:
