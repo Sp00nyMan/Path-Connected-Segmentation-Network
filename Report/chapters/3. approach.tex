@@ -1,0 +1,84 @@
+\section{Proposed Approach}
+
+Here, we formally define the proposed architecture and prove the connectedness property of the resulting composite model.
+
+\subsection{Problem Formulation}
+
+Image segmentation is a fundamental task in computer vision that involves partitioning an input image into meaningful regions or objects.
+The goal of pixelwise image segmentation is to assign a label or class to each pixel in the image only based on the information
+about the individual pixel such as its color and position.
+
+We define the problem as finding such parameters $\hat{\Theta}$ that minimize the loss function over all inputs $x$ in the training dataset.
+\begin{equation}
+    \hat{\Theta} = \arg \min_{\Theta} \mathcal{L}(\mathcal{N}(x, \Theta), y)
+\end{equation}
+
+Where $\mathcal{L}$ is the minimized loss function, that is described in the Section~\ref{loss};
+$y$ is the target label;
+$\mathcal{N}(x, \Theta)$ is the segmentation network described in the Section~\ref{architecture};
+$x \in [0, 1]^2$ is the 2-dimensional vector representation of a pixel consisting of the normalized positional (XY) information.
+
+\subsection{Architecture}
+\label{architecture}
+
+Our architecture is based on the FICNN proposed by \cite{amos2017input}.
+The authors of the paper declare that by constraining some of the parameters of the proposed network
+its output is a convex function of the inputs.
+These constraints are described by the Proposition~1~in~\cite{amos2017input}.
+
+We impose the constraints by using ReLU as the activation function, since it is convex and non-decreasing,
+and by applying ReLU function to all $W_{1:k-1}^{(z)}$ after each optimization step in order to ensure
+their non-negativity.
+
+However, enforcing convexity of the network, as shown in the Section~\ref{experiments}, is rather restrictive,
+since it requires the segmented object to be strictly convex to achieve quality segmentation.
+
+\subsubsection{Proof of path-connectedness}
+
+In this paper, we relax the convexity constraint imposed by FICNN by utilizing a normalizing flow.
+As highlighted by \cite{dinh2016density}, normalizing flow is a bijection with its inverse being differentiable.
+Therefore, normalizing flow is a diffeomorphic function. In this section, we show that combining of a convex function with a diffeomorphism
+results in the path-connectedness of the decision space.
+
+
+Let $N(x)$ such that $N:\mathbb{R}^2 \rightarrow [0, 1]$ be a convex function.
+Let $g(x)$ such that $g: \mathbb{R}^2 \rightarrow \mathbb{R}^2$ be diffeomorphic.
+Then:
+
+\[
+    S := \{x \in \mathbb{R} | (N \circ g)(x) \le c\}
+\]
+
+is connected.
+
+Let $v, w \in S$ be arbitrary. To show that there exists a path $p$,
+i.e., $p: [0, 1] \rightarrow \mathbb{R}^2, p(0) = v, p(1) = w$, p is continuous,
+such that $p(t) \in S \: \forall t\in[0, 1]$ pick
+
+\[
+    p(t) = tw + (1-t)v = g^{-1}(tg(w)+(1-t)g(v))
+\]
+
+Then
+
+\[
+    \begin{split}
+        (N\circ g)(p(t)) & = (N\circ g)(g^{-1}(tg(w)+(1-t)g(v))) \\
+        & = N(g(g^{-1}(tg(w)+(1-t)g(v)))) \\
+        & = N(tg(w)+(1-t)g(v))
+    \end{split}
+\]
+
+Since $N$ is convex,
+
+\[
+    (N\circ g)(p(t)) \le t(N\circ g)(w) + (1-t)(N\circ g)(v)
+\]
+
+Since $w,v \in S$, i.e., $(N\circ g)(w) \le c$ and $(N\circ g)(v) \le c$,
+
+\[
+    (N\circ g)(p(t)) \le c
+\]
+
+Therefore, $p(t) \in S$.

@@ -1,0 +1,28 @@
+\section{Background and Related Work}
+
+The field of image segmentation has been a subject of extensive research over the years,
+with deep learning techniques playing a pivotal role.
+The use of deep learning in image segmentation has been explored in numerous studies, such as the work by \citet{ronneberger2015u} on U-Net,
+a convolutional network for biomedical image segmentation.
+This work demonstrated the effectiveness of deep learning in capturing intricate patterns and producing high-quality segmentation masks.
+However, the vulnerability of deep learning models to adversarial attacks and noise has been a persistent challenge,
+as highlighted by \citet{szegedy2013intriguing}.
+
+The concept of adversarial attacks was first introduced by \citet{szegedy2013intriguing}, where they demonstrated that adding imperceptible perturbations
+to the input can lead to misclassification by deep neural networks.
+This vulnerability has been a significant concern in the field of image segmentation, as it can lead to inaccurate segmentation masks.
+\citet{goodfellow2014explaining} further explored this issue, proposing a family of fasts methods for generating adversarial examples
+and suggesting potential countermeasures.
+
+To address these vulnerabilities, researchers have proposed various techniques to improve the robustness of deep learning models.
+For instance, \citet{madry2017towards} proposed a robust optimization framework for training models that are resilient to adversarial attacks.
+However, these methods often require significant computational resources and do not guarantee the path connectedness of the decision space.
+
+In the realm of image segmentation, Normalizing Flows and Input-Convex Neural Networks have been used to improve the robustness and
+interpretability of models. Normalizing Flows, as popularized by \citet{rezende2015variational} and \citet{dinh2016density},
+provide a framework for constructing complex distributions by transforming a simple initial distribution. Input-Convex Neural Networks, on the other hand, were introduced by \citet{amos2017input}.
+They demonstrated that these networks can enforce certain mathematical properties on the model, leading to more interpretable results.
+However, their work did not specifically address the issue of path connectedness in the decision space.
+
+In this paper, we aim to bridge this gap by introducing a technique that guarantees the path connectedness of the decision space in image segmentation
+models, thereby improving their robustness and interpretability.
